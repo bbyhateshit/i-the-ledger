@@ -1,8 +1,6 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -35,5 +33,19 @@ public class FileService {
             System.out.println("Error reading transactions: " + e.getMessage());
         }
         return transactions;
+    }
+
+    public static void appendTransaction(Transaction t) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH, true))) {
+            writer.printf("%s|%s|%s|%s|%s%n",
+                    t.getDate(),
+                    t.getTime(),
+                    t.getDescription(),
+                    t.getVendor(),
+                    t.getAmount()
+            );
+        } catch (IOException e) {
+            System.out.println("Error writing transaction: " + e.getMessage());
+        }
     }
 }
