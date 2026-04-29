@@ -4,6 +4,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ public class FileService {
 
     public static List<Transaction> readTransactions() {
         List<Transaction> transactions = new ArrayList<>();
+
+
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
@@ -36,10 +39,14 @@ public class FileService {
     }
 
     public static void appendTransaction(Transaction t) {
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String formattedTime = t.getTime().format(timeFormatter);
+
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH, true))) {
             writer.printf("%s|%s|%s|%s|%s%n",
                     t.getDate(),
-                    t.getTime(),
+                    formattedTime,
                     t.getDescription(),
                     t.getVendor(),
                     t.getAmount()
